@@ -1,0 +1,26 @@
+body{
+    background-color: cadetblue;
+}
+
+.heading{
+    text-align: center;
+}
+.heading h1{
+    font-size: 30px;
+}
+.heading h5{
+    font-size: 30px;
+}
+
+.subtitle{
+    margin-top: 30px;
+    text-align: center;
+}
+
+.subtitle h4{
+    font-size: 20px;
+}
+
+.activation-link p{
+    text-align: center;
+}

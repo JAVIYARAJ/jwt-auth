@@ -84,3 +84,8 @@ input[type="submit"]{
     margin-right: 200px;
     margin-bottom: 50px;
 }
+
+.error-tag h4{
+    color: red;
+    font-size: 16px;
+}

@@ -1,8 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const crypto=require('crypto');
+
 const conn = require('./database/dbconnect')
 const app = express();
+
 const ejs = require('ejs');
 const bodyparser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -35,24 +38,32 @@ app.post('/register', async (req, res) => {
     const hash = await bcrypt.hash(user.password, 10);
     const insertQuery = await queryExecurter(`insert into practice.JWT_PRACTICE(name,email,password) values('${user.name}','${user.email}','${hash}')`);
 
-    res.render('login_page');
+    const token = crypto.randomBytes(32).toString('hex');
+    
+    const activationUrl = `https://example.com/activate-account/${token}`;
 
+    res.render('activate_page',{activated:false,activationUrl:activationUrl,userID:insertQuery.insertId});
 });
-
 
 app.post('/login',async (req, res) => {
     const email = req.body.email;
 
-    const result = await queryExecurter(`SELECT * FROM practice.JWT_PRACTICE where JWT_PRACTICE.email='${email}'`)
+    const result = await queryExecurter(`SELECT * FROM practice.JWT_PRACTICE where JWT_PRACTICE.email='${email}' and isActivated=1`);
     const user=result[0];
     
-    const isPasswordCurrect=await bcrypt.compare(req.body.password,user.password);
-    
-    if(isPasswordCurrect){
-        const token=await jwt.sign({user},process.env.JWT_SECRET);
-        res.cookie('token',token);
-        res.redirect('/home')
+    if(user!=null){
+        const isPasswordCurrect=await bcrypt.compare(req.body.password,user.password);
+        
+        if(isPasswordCurrect){
+            const token=await jwt.sign({user},process.env.JWT_SECRET);
+            res.cookie('token',token);
+            res.redirect('/home')
+        }
+    }else{
+        res.status(400).send({"status":"failed","message":"user not exists."});
     }
+
+    
 });
 
 app.post('/logout',(req,res)=>{
@@ -71,6 +82,24 @@ app.post('/changeEmail',async(req,res)=>{
     }
 
 });
+app.get('/actiivateUser',async(req,res)=>{
+    const userID=req.query.userId;
+    const update_query=`UPDATE practice.JWT_PRACTICE SET isActivated = '1' WHERE (id = ${parseInt(userID)});`
+    const result=await queryExecurter(update_query);
+    res.render('activate_page',{activated:true});
+})
+
+app.get('/checkUser',async(req,res)=>{
+    const email=req.query.email;
+    
+    const result=await queryExecurter(`SELECT * FROM practice.JWT_PRACTICE where email='${email}'`);
+    
+    if(result.length>0){
+        res.json({status:false});
+    }else{
+        res.json({status:true});
+    }
+})
 
 const queryExecurter = (query) => {
     return new Promise((resolve, reject) => {
@@ -90,7 +119,10 @@ app.get('/profile',async(req,res)=>{
     }
     else{
         const isvalid=await jwt.verify(token,process.env.JWT_SECRET);
-        res.render('profile',{user:isvalid.user});
+        const userId=isvalid.user.id;
+        const result = await queryExecurter(`SELECT * FROM practice.JWT_PRACTICE where JWT_PRACTICE.id='${userId}'`)
+        const user=result[0];
+        res.render('profile',{user:user});
     }
 })
 

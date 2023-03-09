@@ -21,7 +21,7 @@
                     <div class="form-elemnet">
                         <form action="/register" method="post">
                             <div class="input-tag">
-                                
+
                                 <div class="label">
                                     <label for="name">Name</label>
                                 </div>
@@ -37,7 +37,12 @@
                                 </div>
 
                                 <div class="input">
-                                    <input type="text" name="email">
+                                    <input type="text" name="email" onchange="validateUser(this.value)">
+                                </div>
+                                <div class="error-tag">
+                                    <h4 id="user_error">
+
+                                    </h4>
                                 </div>
                             </div>
                             <div class="input-tag">
@@ -60,18 +65,18 @@
                                     <input type="text" name="confitm_password">
                                 </div>
                             </div>
-                            <div class="register-btn">
+                            <div class="register-btn" id="register-btn">
                                 <input type="submit" value="Sign Up">
                             </div>
                         </form>
                     </div>
                     <div class="sign-in-btn-content">
                         <div class="sign-in-btn">
-                            <span class="main-btn-text">Already have an account?</span> <span class="sign-btn"><a href="/login">Sign in here</a></span>
+                            <span class="main-btn-text">Already have an account?</span> <span class="sign-btn"><a
+                                    href="/login">Sign in here</a></span>
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="right-content">
@@ -83,6 +88,7 @@
     </div>
 </body>
 <script src="/js/register.js">
-   
+
 </script>
+
 </html>
