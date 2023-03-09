@@ -33,7 +33,7 @@ app.post('/register', async (req, res) => {
     if (!user.email || !user.password) {
         return res.status(400).send('username and password is not valid');
     }
-
+    
     //validation
     const hash = await bcrypt.hash(user.password, 10);
     const insertQuery = await queryExecurter(`insert into practice.JWT_PRACTICE(name,email,password) values('${user.name}','${user.email}','${hash}')`);
@@ -82,6 +82,7 @@ app.post('/changeEmail',async(req,res)=>{
     }
 
 });
+
 app.get('/actiivateUser',async(req,res)=>{
     const userID=req.query.userId;
     const update_query=`UPDATE practice.JWT_PRACTICE SET isActivated = '1' WHERE (id = ${parseInt(userID)});`
