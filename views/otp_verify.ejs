@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" href="/css/otp_verify.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
+<body>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center align-items-center container">
+            <div class="card py-5 px-3">
+                <h5 class="m-0">Mobile phone verification</h5><span class="mobile-text">Enter the code we just send on your email</span>
+
+                <form action="/verifyOtp" method="post">
+                <div class="d-flex flex-row mt-5">
+                    <% if(isError==false){ %>
+                        <input type="hidden" name="id" value="<%=id%>">
+                    <%}%>
+                    <input type="text" class="form-control" autofocus="" name="c1">
+                    <input type="text" class="form-control" name="c2">
+                    <input type="text" class="form-control" name="c3">
+                    <input type="text" class="form-control" name="c4">
+                </div>
+               
+            
+                <div class="text-center mt-3">
+                
+                    <input type="submit" value="verify" class="btn btn-primary">
+                </div>
+                
+                <div class="text-center mt-3"><span 
+                    class="d-block mobile-text">Don't receive the code?</span>
+                    <span class="font-weight-bold text-danger cursor">
+                    <a href="/reGenerateOtp">Resend</a>
+                    </span>
+
+                    <% if(isError==false){ %>
+                        <div class="text-center mt-3">
+                            <p>please enter valid otp</p>
+                        </div>
+                    <%}%>
+
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
