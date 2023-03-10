@@ -5,7 +5,7 @@ const user_error = document.getElementById("user_error");
 auth_btn.style.display = 'none';
 
 async function validateUser(email) {
-    
+
     const response = await fetch(`/checkUser/?email=${email}`);
     const data = await response.json();
     const status = data.status;
@@ -20,7 +20,7 @@ async function validateUser(email) {
 }
 
 async function validatePassword(password, type) {
-    
+
     if (password.length < 7) {
         if (type == 'pwd') {
             auth_btn.style.display = 'none';
@@ -38,5 +38,5 @@ async function validatePassword(password, type) {
             cPassword_error.innerHTML = ""
         }
     }
-    
+
 }
